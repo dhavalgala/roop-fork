@@ -154,7 +154,7 @@ def start() -> None:
         update_status(f'Extracting frames with {fps} FPS...')
         extract_frames(roop.globals.target_path, fps)
     else:
-        update_status('Extracting frames with 30 FPS...')
+        update_status('Extracting frames with 24 FPS...')
         extract_frames(roop.globals.target_path)
     # process frame
     temp_frame_paths = get_temp_frame_paths(roop.globals.target_path)
@@ -172,7 +172,7 @@ def start() -> None:
         update_status(f'Creating video with {fps} FPS...')
         create_video(roop.globals.target_path, fps)
     else:
-        update_status('Creating video with 30 FPS...')
+        update_status('Creating video with 24 FPS...')
         create_video(roop.globals.target_path)
     # handle audio
     if roop.globals.skip_audio:
