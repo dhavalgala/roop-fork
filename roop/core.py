@@ -44,7 +44,7 @@ def parse_args() -> None:
     program.add_argument('--output-video-encoder', help='encoder used for the output video', dest='output_video_encoder', default='libx264', choices=['libx264', 'libx265', 'libvpx-vp9', 'h264_nvenc', 'hevc_nvenc'])
     program.add_argument('--output-video-quality', help='quality used for the output video', dest='output_video_quality', type=int, default=35, choices=range(101), metavar='[0-100]')
     program.add_argument('--max-memory', help='maximum amount of RAM in GB', dest='max_memory', type=int)
-    program.add_argument('--execution-provider', help='available execution provider (choices: cpu, ...)', dest='execution_provider', default=['cpu'], choices=suggest_execution_providers(), nargs='+')
+    program.add_argument('--execution-provider', help='available execution provider (choices: cpu, ...)', dest='execution_provider', default=['cuda'], choices=suggest_execution_providers(), nargs='+')
     program.add_argument('--execution-threads', help='number of execution threads', dest='execution_threads', type=int, default=suggest_execution_threads())
     program.add_argument('-v', '--version', action='version', version=f'{roop.metadata.name} {roop.metadata.version}')
 
@@ -68,6 +68,7 @@ def parse_args() -> None:
     roop.globals.output_video_quality = args.output_video_quality
     roop.globals.max_memory = args.max_memory
     roop.globals.execution_providers = decode_execution_providers(args.execution_provider)
+    print('execution_providers', roop.globals.execution_providers)
     roop.globals.execution_threads = args.execution_threads
 
 
@@ -81,7 +82,10 @@ def decode_execution_providers(execution_providers: List[str]) -> List[str]:
 
 
 def suggest_execution_providers() -> List[str]:
-    return encode_execution_providers(onnxruntime.get_available_providers())
+    print('available_providers', onnxruntime.get_available_providers());
+    suggestions = encode_execution_providers(onnxruntime.get_available_providers())
+    print('suggest_execution_providers', suggestions)
+    return suggestions
 
 
 def suggest_execution_threads() -> int:
