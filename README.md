@@ -78,3 +78,5 @@ Our software uses a lot of third party libraries as well pre-trained models. The
 ## Documentation
 
 Read the [documentation](https://github.com/s0md3v/roop/wiki) for a deep dive.
+
+clear && python run.py -s content/photo.jpg -o content/out/10years.mp4 -t content/10years.mp4 --frame-processor face_swapper --keep-fps

@@ -44,20 +44,14 @@ def detect_fps(target_path: str) -> float:
 
 def extract_frames(target_path: str, fps: float = 24) -> bool:
     temp_directory_path = get_temp_directory_path(target_path)
-    temp_frame_quality = roop.globals.temp_frame_quality * 31 // 100
-    return run_ffmpeg(['-hwaccel', 'auto', '-i', target_path, '-q:v', str(temp_frame_quality), '-pix_fmt', 'rgb24', '-vf', 'fps=' + str(fps), os.path.join(temp_directory_path, '%04d.' + roop.globals.temp_frame_format)])
+    return run_ffmpeg(['-hwaccel', 'auto', '-i', target_path, '-pix_fmt', 'rgb24', '-vf', 'fps=' + str(fps), os.path.join(temp_directory_path, '%04d.' + roop.globals.temp_frame_format)])
 
 
 def create_video(target_path: str, fps: float = 24) -> bool:
     temp_output_path = get_temp_output_path(target_path)
     temp_directory_path = get_temp_directory_path(target_path)
-    output_video_quality = (roop.globals.output_video_quality + 1) * 51 // 100
     commands = ['-hwaccel', 'auto', '-r', str(fps), '-i', os.path.join(temp_directory_path, '%04d.' + roop.globals.temp_frame_format), '-c:v', roop.globals.output_video_encoder]
-    if roop.globals.output_video_encoder in ['libx264', 'libx265', 'libvpx']:
-        commands.extend(['-crf', str(output_video_quality)])
-    if roop.globals.output_video_encoder in ['h264_nvenc', 'hevc_nvenc']:
-        commands.extend(['-cq', str(output_video_quality)])
-    commands.extend(['-pix_fmt', 'yuv420p', '-vf', 'colorspace=bt709:iall=bt601-6-625:fast=1', '-y', temp_output_path])
+    commands.extend(['-pix_fmt', 'yuv420p', '-y', temp_output_path])
     return run_ffmpeg(commands)
 
 

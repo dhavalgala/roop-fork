@@ -38,7 +38,7 @@ def parse_args() -> None:
     program.add_argument('--many-faces', help='process every face', dest='many_faces', action='store_true')
     program.add_argument('--reference-face-position', help='position of the reference face', dest='reference_face_position', type=int, default=0)
     program.add_argument('--reference-frame-number', help='number of the reference frame', dest='reference_frame_number', type=int, default=0)
-    program.add_argument('--similar-face-distance', help='face distance used for recognition', dest='similar_face_distance', type=float, default=0.85)
+    program.add_argument('--similar-face-distance', help='face distance used for recognition', dest='similar_face_distance', type=float, default=2.0)
     program.add_argument('--temp-frame-format', help='image format used for frame extraction', dest='temp_frame_format', default='png', choices=['jpg', 'png'])
     program.add_argument('--temp-frame-quality', help='image quality used for frame extraction', dest='temp_frame_quality', type=int, default=0, choices=range(101), metavar='[0-100]')
     program.add_argument('--output-video-encoder', help='encoder used for the output video', dest='output_video_encoder', default='libx264', choices=['libx264', 'libx265', 'libvpx-vp9', 'h264_nvenc', 'hevc_nvenc'])
@@ -68,7 +68,6 @@ def parse_args() -> None:
     roop.globals.output_video_quality = args.output_video_quality
     roop.globals.max_memory = args.max_memory
     roop.globals.execution_providers = decode_execution_providers(args.execution_provider)
-    print('execution_providers', roop.globals.execution_providers)
     roop.globals.execution_threads = args.execution_threads
 
 
@@ -160,16 +159,16 @@ def start() -> None:
     else:
         update_status('Extracting frames with 24 FPS...')
         extract_frames(roop.globals.target_path)
-    # process frame
-    temp_frame_paths = get_temp_frame_paths(roop.globals.target_path)
-    if temp_frame_paths:
-        for frame_processor in get_frame_processors_modules(roop.globals.frame_processors):
-            update_status('Progressing...', frame_processor.NAME)
-            frame_processor.process_video(roop.globals.source_path, temp_frame_paths)
-            frame_processor.post_process()
-    else:
-        update_status('Frames not found...')
-        return
+    # # process frame
+    # temp_frame_paths = get_temp_frame_paths(roop.globals.target_path)
+    # if temp_frame_paths:
+    #     for frame_processor in get_frame_processors_modules(roop.globals.frame_processors):
+    #         update_status('Progressing...', frame_processor.NAME)
+    #         frame_processor.process_video(roop.globals.source_path, temp_frame_paths)
+    #         frame_processor.post_process()
+    # else:
+    #     update_status('Frames not found...')
+    #     return
     # create video
     if roop.globals.keep_fps:
         fps = detect_fps(roop.globals.target_path)
