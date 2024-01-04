@@ -210,7 +210,7 @@ def run() -> None:
     for frame_processor in get_frame_processors_modules(roop.globals.frame_processors):
         if not frame_processor.pre_check():
             return
-    limit_resources()
+    # limit_resources()
     if roop.globals.headless:
         start()
     else:

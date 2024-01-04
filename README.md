@@ -80,3 +80,4 @@ Our software uses a lot of third party libraries as well pre-trained models. The
 Read the [documentation](https://github.com/s0md3v/roop/wiki) for a deep dive.
 
 clear && python run.py -s content/photo.jpg -o content/out/10years.mp4 -t content/10years.mp4 --frame-processor face_swapper --keep-fps
+ffmpeg -i n2.mp4 -c copy -map 0 -segment_time 00:01:00 -f segment -reset_timestamps 1 out/n2%03d.mp4op
